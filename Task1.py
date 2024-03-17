@@ -1,4 +1,4 @@
-print ("Hello World")
+#print ("Hello World")
 
 
 from GoogleNews import GoogleNews
