@@ -1,56 +1,61 @@
 import pandas as pd
 import datetime
 from GoogleNews import GoogleNews
-from bs4 import BeautifulSoup
+from newspaper import Article
 import requests
 
-# Fonction pour récupérer la description d'un article à partir de son URL
-def get_article_description(url):
-    try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        # Trouver la balise contenant la description de l'article
-        description = soup.find('meta', attrs={'name': 'description'})
-        if description:
-            return description['content']
-        else:
-            return None
-    except Exception as e:
-        print(f"Une erreur s'est produite lors de la récupération de la description de l'article : {e}")
-        return None
-
 gnews = GoogleNews()
-
 gnews.set_time_range('01/03/2024','16/03/2024')
-
 gnews.search('bitcoin')
-
 results = gnews.results()
 
+#La librairie GoogleNews ne nous donne pas assez d'infos à mon goût donc j'utilise une autre méthode pour gratter qlq infos de plus (voir fonction suivante)
 
-# Créez une liste pour stocker les informations des articles
+#On prendra ici des infos en plus qui se retrouveront plus tard dans notre dataframe 
+def get_more_info(url):
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+    response = requests.get(url, headers=headers)
+    article = Article(url)
+    article.set_html(response.content)
+    article.parse()
+
+    meta = article.meta_description
+    contenu = article.text
+
+    return meta, contenu
+
+
 articles_info = []
 
-# Parcourez chaque élément de votre liste de résultats
+#On fait une boucle pour tous les résultats trouvés par GoogleNews
 for result in results:
-    # Obtenez la description de l'article en utilisant la fonction définie ci-dessus
-    description = get_article_description(result['link'])
-    print(description)
-    # Créez un dictionnaire pour stocker les informations de l'article
-    article_info = {
-        'Title': result['title'],
-        'Media': result['media'],
-        'Date': result['date'],
-        'Link': result['link'],
-        'Description': description
-    }
-    # Ajoutez ce dictionnaire à la liste articles_info
-    articles_info.append(article_info)
+    #Les url renvoyés par GoogleNews ne sont pas valables, avec un peu de recherche je me suis apperçu qui fallait les slipts avant le premier & dans l'url
+    #Exemple 
+    #Url renoyé par GoogleNews : https://cryptopotato.com/this-happened-on-coinbases-bitcoin-premium-index-before-btc-plunged-to-66k/&ved=2ahUKEwj_to_CyPuEAxWiVqQEHY8kD1kQxfQBegQIABAC&usg=AOvVaw1tRkOHCP-kHNJq5LaGn-7D/
+    #Url valide : https://cryptopotato.com/this-happened-on-coinbases-bitcoin-premium-index-before-btc-plunged-to-66k/
+    url = result['link'].split('&')[0]
+    art = Article(url)
+    #print(url)
+    try:
+        #On ajoute tts les infos dans un dico pour le dataframe final
+        meta, contenu = get_more_info(url)
+        article_info = {
+            'Title': result['title'],
+            'Media': result['media'],
+            'Date': result['date'],
+            'Link':  art.url,
+            'Résumé': contenu,  
+            'Meta description': meta
+        }
+        articles_info.append(article_info)
+    #Ca on s'en fout notre code marche 
+    except Exception as e:
+        print("Erreur lors de la récupération des informations de l'article:", e)
 
-# Utilisez la liste pour créer un DataFrame pandas
+#Petit dataframe des familles tu connais 
 df = pd.DataFrame(articles_info)
+#print(df.info())
 print(df)
-# Affichez le DataFrame
-print(df.info())
 
+print(df['Link'])
 

@@ -1,31 +1,32 @@
-import requests
 import pandas as pd
+import datetime
+from GoogleNews import GoogleNews
+from bs4 import BeautifulSoup
+import requests
+from newspaper import Article
+import nltk
 
-api_key = 'ca04114e68ca4f0fb81651c1c301027a'
-parameters = {
-    'q': 'actualités',
-    'language': 'fr',
-    'apiKey': api_key
+url = 'https://news.bitcoin.com/unveiling-mr-100-the-mystery-bitcoin-wallet-linked-to-upbits-cold-storage/'
+article = Article(url)
+article.download()
+article.parse()
+
+meta = article.meta_description
+contenu = article.text
+url = article.url
+date = article.publish_date
+title = article.title
+media = article.source_url
+
+donnees = {
+    'URL': [url],
+    'Titre': [title],
+    'Date de publication': [date],
+    'Contenu': [contenu],
+    'Méta-description': [meta],
+    'Media': [media]
 }
 
-url = 'https://newsapi.org/v2/top-headlines'
-response = requests.get(url, params=parameters)
-data = response.json()
-
-if data['status'] == 'ok':
-    if data['totalResults'] > 0:
-        articles_info = []
-        for article in data['articles']:
-            title = article['title']
-            author = article.get('author', 'N/A')
-            date = article['publishedAt']
-            content = article['description']
-            articles_info.append({'Title': title, 'Author': author, 'Date': date, 'Content': content})
-        df = pd.DataFrame(articles_info)
-        print(df)
-    else:
-        print("Aucun résultat trouvé.")
-else:
-    print('Erreur lors de la récupération des actualités:', data['message'])
+df = pd.DataFrame(donnees)
 
 print(df)
