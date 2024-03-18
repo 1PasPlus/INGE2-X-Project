@@ -21,6 +21,7 @@ def get_more_info(url):
 
     meta = article.meta_description
     contenu = article.text
+    #print(contenu)
 
     return meta, contenu
 
@@ -57,5 +58,6 @@ df = pd.DataFrame(articles_info)
 #print(df.info())
 print(df)
 
-print(df['Link'])
+#rint(df['Link'])
+print(df.info())
 
