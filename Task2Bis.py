@@ -6,10 +6,12 @@ import requests
 from gnews import GNews
 
 #La librairie GoogleNews ne nous donne pas assez d'infos à mon goût donc j'utilise une autre méthode pour gratter qlq infos de plus (voir fonction suivante)
+
 #On prendra ici des infos en plus qui se retrouveront plus tard dans notre dataframe 
 def get_more_info(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-    response = requests.get(url, headers=headers)
+    #headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+    #response = requests.get(url, headers=headers)
+    response = requests.get(url)
     article = Article(url)
     article.set_html(response.content)
     article.parse()
@@ -21,11 +23,8 @@ def get_more_info(url):
     return meta, contenu
 
 #Fonction qui nous donne les tops articles sur le sujet choisit par l'utilisateur
-def topic_news(keyword):
-    keyword = input("\n\nEntrez votre mot-clé : ")
-    start = input("\n\nEntrez au format JJ/MM/AAAA la timeframe que vous souhaitez appliquer à votre recherche\nATTENTION ! Tous les résultats seront issus d'articles parus dans cet intervale de temps\nDate de début : ")
-    end = input("\n\nDate de fin (au format JJ/MM/AAAA) : ")
-    
+def topic_news(keyword,start,end):
+
     getnews = GoogleNews()
     getnews.set_time_range(start,end)
     getnews.search(keyword)
@@ -90,15 +89,13 @@ def top_news(article_language, article_country, time_period, article_number):
         "description": [article['description']for article in articles]
     })  
 
-    # Récupération des liens de chaque ligne du DataFrame
+     # Récupération des liens de chaque ligne du DataFrame
     for index, row in df.iterrows():
         link = row['url']
         meta, contenu = get_more_info(link)
-        df = df.append({
-            'Meta description': meta,
-            'Contenu': contenu 
-            }, ignore_index=True
-        )
+        df.at[index, 'Meta description'] = meta
+        df.at[index, 'Contenu'] = contenu
+
     return df
 
 choix = input("Voulez-vous des actualités Top du moment (1) ou des actualités en rapport avec un mot-clé (2) ? ")
@@ -157,13 +154,19 @@ if choix == "1":
 
     # Appel de la fonction top_news avec les paramètres validés
     df = top_news(speak, nationality, time_range, nb_results)
-    print(df.info())
-    print(df)
+    
+    #print(df.info())
+    #print(df)
     df.to_csv("choix_tendances.csv", sep=";", index=False)
 
 elif choix == "2":
     # Code pour le deuxième choix
-    pass
+    keyword = input("\n\nEntrez votre mot-clé : ")
+    start = input("\n\nEntrez au format JJ/MM/AAAA la timeframe que vous souhaitez appliquer à votre recherche\nATTENTION ! Tous les résultats seront issus d'articles parus dans cet intervale de temps\nDate de début : ")
+    end = input("\n\nDate de fin (au format JJ/MM/AAAA) : ")
+    df = topic_news(keyword,start,end)
+    print(df)
+    print(df.info())
 
 else:
     print("Choix invalide.")
