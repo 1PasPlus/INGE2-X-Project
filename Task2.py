@@ -96,8 +96,8 @@ elif choix == "2":
 
     #Petit dataframe des familles tu connais 
     df = pd.DataFrame(articles_info)
-    #print(df.info())
-    #print(df)
+    print(df.info())
+    print(df)
     #print(df['Link'])
     #print(df.info())
     #print(df['Résumé'])
