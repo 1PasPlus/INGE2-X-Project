@@ -9,8 +9,9 @@ from gnews import GNews
 
 #On prendra ici des infos en plus qui se retrouveront plus tard dans notre dataframe 
 def get_more_info(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-    response = requests.get(url, headers=headers)
+    #headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+    #response = requests.get(url, headers=headers)
+    response = requests.get(url)
     article = Article(url)
     article.set_html(response.content)
     article.parse()
@@ -45,15 +46,11 @@ if choix == "1":
         "description": [article['description']for article in articles]
     })  
 
-    # Récupération des liens de chaque ligne du DataFrame
     for index, row in df.iterrows():
         link = row['url']
         meta, contenu = get_more_info(link)
-        df = df.append({
-            'Meta description': meta,
-            'Contenu': contenu 
-            }, ignore_index=True
-        )
+        df.at[index, 'Meta description'] = meta
+        df.at[index, 'Contenu'] = contenu
     
     df.head(5)
     df.info()
