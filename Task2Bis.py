@@ -154,7 +154,6 @@ if choix == "1":
 
     # Appel de la fonction top_news avec les paramètres validés
     df = top_news(speak, nationality, time_range, nb_results)
-    
     #print(df.info())
     #print(df)
     df.to_csv("choix_tendances.csv", sep=";", index=False)
