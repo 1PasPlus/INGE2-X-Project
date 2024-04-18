@@ -33,6 +33,7 @@ def topic_news(keyword,start,end):
     articles_info = []
     #On fait une boucle pour tous les résultats trouvés par GoogleNews
     for result in results:
+        #print(result)
         #Les url renvoyés par GoogleNews ne sont pas valables, avec un peu de recherche je me suis apperçu qui fallait les slipts avant le premier & dans l'url
         #Exemple 
         #Url renoyé par GoogleNews : https://cryptopotato.com/this-happened-on-coinbases-bitcoin-premium-index-before-btc-plunged-to-66k/&ved=2ahUKEwj_to_CyPuEAxWiVqQEHY8kD1kQxfQBegQIABAC&usg=AOvVaw1tRkOHCP-kHNJq5LaGn-7D/
@@ -44,14 +45,17 @@ def topic_news(keyword,start,end):
             #On ajoute tts les infos dans un dico pour le dataframe final
             meta, contenu = get_more_info(url)
             article_info = {
-                'Title': result['title'],
-                'Media': result['media'],
-                'Date': result['date'],
-                'Link':  art.url,
-                'Résumé': contenu,  
-                'Meta description': meta
+                'Titre': result['title'],
+                'Source': result['media'],
+                'url':  art.url,
+                'Date': result['datetime'],
+                'Description': result['desc'],
+                'Meta description': meta,
+                'Contenu': contenu
+                
             }
             articles_info.append(article_info)
+        
         #Ca on s'en fout notre code marche 
         except Exception as e:
             print("Erreur lors de la récupération des informations de l'article:", e)
@@ -166,6 +170,7 @@ elif choix == "2":
     df = topic_news(keyword,start,end)
     print(df)
     print(df.info())
+    df.to_csv("choix_topic.csv", sep=";", index=False)
 
 else:
     print("Choix invalide.")
