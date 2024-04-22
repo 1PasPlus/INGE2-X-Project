@@ -8,8 +8,6 @@ from gnews import GNews
 
 #On prendra ici des infos en plus qui se retrouveront plus tard dans notre dataframe 
 def get_more_info(url):
-    #headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-    #response = requests.get(url, headers=headers)
     response = requests.get(url)
     article = Article(url)
     article.set_html(response.content)
@@ -32,14 +30,17 @@ def topic_news(keyword,start,end):
     articles_info = []
     #On fait une boucle pour tous les résultats trouvés par GoogleNews
     for result in results:
-        #print(result)
-        #Les url renvoyés par GoogleNews ne sont pas valables, avec un peu de recherche je me suis apperçu qui fallait les slipts avant le premier & dans l'url
-        #Exemple 
-        #Url renoyé par GoogleNews : https://cryptopotato.com/this-happened-on-coinbases-bitcoin-premium-index-before-btc-plunged-to-66k/&ved=2ahUKEwj_to_CyPuEAxWiVqQEHY8kD1kQxfQBegQIABAC&usg=AOvVaw1tRkOHCP-kHNJq5LaGn-7D/
-        #Url valide : https://cryptopotato.com/this-happened-on-coinbases-bitcoin-premium-index-before-btc-plunged-to-66k/
+
+        # Les url renvoyés par GoogleNews ne sont pas valables, avec un peu de recherche je me suis apperçu qui fallait les slipts avant le premier & dans l'url
+        # Exemple 
+        # Url renoyé par GoogleNews : https://cryptopotato.com/this-happened-on-coinbases-bitcoin-premium-index-before-btc-plunged-to-66k/&ved=2ahUKEwj_to_CyPuEAxWiVqQEHY8kD1kQxfQBegQIABAC&usg=AOvVaw1tRkOHCP-kHNJq5LaGn-7D/
+        # Url valide : https://cryptopotato.com/this-happened-on-coinbases-bitcoin-premium-index-before-btc-plunged-to-66k/
+
+        
         url = result['link'].split('&')[0]
         art = Article(url)
         #print(url)
+
         try:
             #On ajoute tts les infos dans un dico pour le dataframe final
             meta, contenu = get_more_info(url)
