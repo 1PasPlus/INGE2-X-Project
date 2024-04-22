@@ -89,8 +89,8 @@ def top_news(article_language, article_country, time_period, article_number):
         "Source": [article['title'].split(' - ')[1] for article in articles],
         #"source2" : [article['publisher'] for article in articles], mauvais format "{'href': 'https://www.20minutes.fr'
         "url" : [article['url'] for article in articles],
-        "published date": [article['published date']for article in articles],
-        "description": [article['description']for article in articles]
+        "Date": [article['published date']for article in articles],
+        "Description": [article['description']for article in articles]
     })  
 
      # Récupération des liens de chaque ligne du DataFrame
