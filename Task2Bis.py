@@ -204,8 +204,8 @@ corpus = []
 with open('choix_tendances.csv', newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        title_tokens = preprocess_text(row['Titre'])
-        description_tokens = preprocess_text(row['description'])
+        title_tokens = preprocess_text(df['Titre'])
+        description_tokens = preprocess_text(df['description'])
         corpus.append(title_tokens + description_tokens)
 
 # Calcul des tags pour chaque ligne du corpus
