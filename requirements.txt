@@ -2,3 +2,16 @@ nltk
 pandas
 requests
 newspaper3k
+gnews
+GoogleNews
+lxml_html_clean
+Pillow
+diffusers
+torch
+torchvision
+torchaudio
+transformers
+accelerate 
+transformers  
+scipy 
+safetensors
