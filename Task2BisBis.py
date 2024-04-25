@@ -124,7 +124,7 @@ if choix == "1":
     nb_results = int(input("\n\nCombien de résultats souhaitez-vous afficher? "))
 
     df = top_news(speak, nationality, time_range, nb_results)
-    df.to_csv("choix_tendances.csv", sep=";", index=False)
+    #df.to_csv("choix_tendances.csv", sep=";", index=False)
 
 elif choix == "2":
     keyword = input("\n\nEntrez votre mot-clé : ")
@@ -165,7 +165,7 @@ for article_tokens in corpus:
     tags = Counter(article_tokens).most_common(5)
     tags_list.append(tags)
 
-df = pd.read_csv('choix_tendances.csv', delimiter=';')
+#df = pd.read_csv('choix_tendances.csv', delimiter=';')
 
 for i, tags in enumerate(tags_list):
     df.at[i, 'Tags'] = ', '.join(tag[0] for tag in tags)
