@@ -52,8 +52,8 @@ def topic_news(keyword,language,period):
                 'Description': result['desc'],
                 'Meta description': meta,
                 'Contenu': contenu
-                
             }
+
             articles_info.append(article_info)
         
         #Ca on s'en fout notre code marche 
@@ -102,7 +102,6 @@ def summarize_w_bart (df):
     articles = df["Contenu"]
     articles_sum_bart = []
     summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-    
     count = 0
     
     for article in articles:
