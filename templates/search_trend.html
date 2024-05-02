@@ -3,20 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Trend</title>
+    <title>Search Trends</title>
 </head>
 <body>
-    <h1>Search Trend</h1>
+    <h1>Search Trends</h1>
     <form action="/search_trend" method="post">
-        <label for="language">Language:</label>
-        <input type="text" id="language" name="language"><br><br>
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country"><br><br>
-        <label for="period">Period:</label>
-        <input type="text" id="period" name="period"><br><br>
-        <label for="results">Results:</label>
-        <input type="text" id="results" name="results"><br><br>
-        <input type="submit" value="Submit">
+        <label for="language">Choose a language:</label>
+        <select name="language" id="language">
+            {% for lang, code in supported_languages.items() %}
+                <option value="{{ code }}">{{ lang }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="country">Choose a country:</label>
+        <select name="country" id="country">
+            {% for country, code in supported_countries.items() %}
+                <option value="{{ code }}">{{ country }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="period">Choose a period:</label>
+        <select name="period" id="period">
+            <option value="1d">Last 24 hours</option>
+            <option value="7d">Last 7 days</option>
+            <option value="30d">Last 30 days</option>
+        </select><br><br>
+        <label for="results">Number of results:</label>
+        <input type="number" id="results" name="results" min="1" max="20" value="5"><br><br>
+        <input type="submit" value="Search">
     </form>
 </body>
 </html>
