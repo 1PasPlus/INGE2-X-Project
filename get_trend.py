@@ -87,14 +87,18 @@ if __name__ == "__main__":
     # Récupérer les arguments de la ligne de commande
     article_language = sys.argv[1]
     article_country = sys.argv[2]
-    time_period = sys.argv[3]
+    article_period = sys.argv[3]
     article_number = sys.argv[4]
 
-    # Appeler la fonction top_news avec les arguments récupérés
-    df = top_news(article_language, article_country, time_period, article_number)
+    #On reformate correctement les données
+    language = article_language.lower()
+    country = article_country.upper()
+    time_range = article_period + 'd'
+    n = int(article_number)
+ 
+    df = top_news(language, country, time_range, n)
     df.to_csv("choix_tendances.csv", sep=";", index=False)
 
-    # Lecture de chaque ligne du fichier CSV et traitement individuel
     with open('choix_tendances.csv', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
         data = []
