@@ -21,12 +21,13 @@ def get_more_info(url):
     return meta, contenu
 
 # La fonction pour récupérer les actualités sur un sujet spécifique
-def topic_news(keyword, language, period):
+def topic_news(keyword, language, location, time_range):
 
-    getnews = GoogleNews()
-    getnews.set_lang(language)
-    getnews.set_encode('utf-8')
-    getnews.set_period(period)
+    #getnews = GoogleNews()
+    getnews = GoogleNews(lang=language, region=location, period=time_range)
+    #getnews.set_lang(language)
+    #getnews.set_encode('utf-8')
+    #getnews.set_period(period)
 
     getnews.search(keyword)
     results = getnews.results()
@@ -106,9 +107,10 @@ if __name__ == "__main__":
     keyword = sys.argv[1]
     language = sys.argv[2]
     period = sys.argv[3]
+    region = sys.argv[4]
 
     # Appeler la fonction topic_news avec les arguments récupérés
-    df = topic_news(keyword, language, period)
+    df = topic_news(keyword, language, region, period)
     df.to_csv("choix_topic.csv", sep=";", index=False)
 
     # Lecture de chaque ligne du fichier CSV et traitement individuel

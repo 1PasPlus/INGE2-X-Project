@@ -39,9 +39,10 @@ def search_topic():
         keyword = request.form['keyword']
         language = request.form['language']
         period = request.form['period']
+        country = request.form['country']
         
         # Exécuter le script Python get_topic.py avec les arguments spécifiés
-        subprocess.run(['python', 'get_topic.py', keyword, language, period])
+        subprocess.run(['python', 'get_topic.py', keyword, language, country, period])
         
         return render_template('search_topic.html')
 
