@@ -91,32 +91,55 @@ def summarize_w_bart(df):
     
             articles_sum_bart.append(" ".join(summaries))
             count += 1
-            print("----------- article numéro", count,"completed. All informations are stored -----------")
+            print("----------- article numéro", count,"completed with Bart. All informations are stored -----------")
     
 
     X = pd.DataFrame({'Résumé Bart': articles_sum_bart})
 
     return X
 
-if __name__ == "__main__":
-    # Récupérer les arguments de la ligne de commande
-    keyword = sys.argv[1]
-    language = sys.argv[2]
-    period = sys.argv[3]
-    region = sys.argv[4]
+def summarize_w_falcon(df):
 
-    # Appeler la fonction topic_news avec les arguments récupérés
-    df = topic_news(keyword, language, region, period)
-    df.to_csv("choix_topic.csv", sep=";", index=False)
+    articles = df["Contenu"]
+    articles_sum_falcon = []
+    summarizer = pipeline("summarization", model="Falconsai/text_summarization")
+    count = 0
+    
+    for article in articles:
+        summaries = []  
+        
+        if type(article) != str:
+            pass
+        
+        else:
+            segments = split_into_segments(article)
+            
+            for segment in segments:
+                summary = summarizer(segment, max_length=1000, min_length=30, do_sample=False)
+                summaries.append(summary[0]['summary_text'])
+            
+    
+            articles_sum_falcon.append(" ".join(summaries))
+            count += 1
+            print("----------- article numéro", count,"completed with Falcon. All informations are stored -----------")
+    
 
-    # Lecture de chaque ligne du fichier CSV et traitement individuel
-    with open('choix_topic.csv', newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=';')
-        data = []
-        for row in reader:
-            data.append(row)
+    Y = pd.DataFrame({'Résumé Falcon': articles_sum_falcon})
 
-    info = pd.DataFrame(data)
-    X = summarize_w_bart(info)
-    final_df = pd.concat([info, X], axis=1)
-    final_df.to_csv("article_topic_sum.csv", sep=";", index=False, quoting=csv.QUOTE_ALL)
+    return Y
+# Appeler la fonction topic_news avec les arguments récupérés
+df = topic_news("bitcoin", 'fr', 'FR', '7d')
+df.to_csv("choix_topic.csv", sep=";", index=False)
+
+# Lecture de chaque ligne du fichier CSV et traitement individuel
+with open('choix_topic.csv', newline='', encoding='utf-8') as csvfile:
+    reader = csv.DictReader(csvfile, delimiter=';')
+    data = []
+    for row in reader:
+        data.append(row)
+
+info = pd.DataFrame(data)
+X = summarize_w_bart(info)
+Y = summarize_w_falcon(info)
+final_df = pd.concat([info, X, Y], axis=1)
+final_df.to_csv("article_topic_sum.csv", sep=";", index=False, quoting=csv.QUOTE_ALL)

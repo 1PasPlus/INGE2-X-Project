@@ -4,20 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Topic</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Search Topic</h1>
-    <form action="/search_topic" method="post">
-        <label for="keyword">Keyword:</label>
-        <input type="text" id="keyword" name="keyword"><br><br>
-        <label for="language">Language:</label>
-        <input type="text" id="language" name="language"><br><br>
-        <label for="period">Period:</label>
-        <input type="text" id="period" name="period"><br><br>
-        <label for="country">country:</label>
-        <input type="text" id="country" name="country"><br><br>
-        <input type="submit" value="Submit">
-        
-    </form>
+    <div class="container">
+        <h1>Search Topic</h1>
+        <form action="/search_topic" method="post">
+            <label for="keyword">Keyword:</label>
+            <input type="text" id="keyword" name="keyword"><br><br>
+            
+            <label for="language">Language:</label>
+            <select name="language" id="language">
+                {% for lang, code in supported_languages.items() %}
+                    <option value="{{ code }}">{{ lang }}</option>
+                {% endfor %}
+            </select><br><br>
+            <label for="period">Period:</label>
+            <select name="period" id="period">
+                <option value="1d">Last 24 hours</option>
+                <option value="7d">Last 7 days</option>
+                <option value="30d">Last 30 days</option>
+            </select><br><br>
+
+            <label for="country">Country:</label>
+            <select name="country" id="country">
+                {% for country, code in supported_countries.items() %}
+                    <option value="{{ code }}">{{ country }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 </body>
 </html>

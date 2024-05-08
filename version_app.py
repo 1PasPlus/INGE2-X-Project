@@ -1,7 +1,6 @@
 import subprocess
 from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
-import csv
 
 # Définition des langues et des pays pris en charge
 supported_countries = {
@@ -46,8 +45,7 @@ def search_topic():
         # Exécuter le script Python get_topic.py avec les arguments spécifiés
         subprocess.run(['python', 'get_topic.py', keyword, language, country, period])
         
-        # Rediriger vers la page des résultats
-        return redirect(url_for('show_results', type='topic'))
+        return render_template('search_topic.html', supported_languages=supported_languages, supported_countries=supported_countries)
 
     return render_template('search_topic.html', supported_languages=supported_languages, supported_countries=supported_countries)
 
@@ -62,32 +60,29 @@ def search_trend():
         # Exécuter le script Python get_trend.py avec les arguments spécifiés
         subprocess.run(['python', 'get_trend.py', language, country, period, results])
         
-        # Rediriger vers la page des résultats
-        return redirect(url_for('show_results', type='trend'))
-
+        return render_template('search_trend.html', supported_languages=supported_languages, supported_countries=supported_countries)
+    
     return render_template('search_trend.html', supported_languages=supported_languages, supported_countries=supported_countries)
 
 @app.route('/show_results/<string:type>', methods=['GET', 'POST'])
 def show_results(type):
-    try:
-        file_name = 'article_tendance_sum.csv' if type == 'trend' else 'article_topic_sum.csv'
-        path = f'./{file_name}'  
-        data = pd.read_csv(path, quoting=csv.QUOTE_NONE)
-        articles = data.to_dict(orient='records')
-        return render_template('show_results.html', articles=articles, type=type)
-    except FileNotFoundError:
-        error_message = "Aucun résultat disponible pour le type de recherche sélectionné."
-        return render_template('show_results.html', error_message=error_message, type=type)
+    if request.method == 'POST':
+        selected_article_id = request.form.get('selected_article')
+        # Redirige vers une route qui montre les détails de l'article choisi
+        return redirect(url_for('show_article', type=type, article_id=selected_article_id))
 
-
+    file_name = 'article_tendance_sum.csv' if type == 'tendance' else 'article_topic_sum.csv'
+    data = pd.read_csv(f'static/{file_name}')
+    articles = data.to_dict(orient='records')
+    return render_template('show_results.html', articles=articles, type=type)
 
 @app.route('/show_article/<string:type>/<int:article_id>')
 def show_article(type, article_id):
-    file_name = 'article_tendance_sum.csv' if type == 'trend' else 'article_topic_sum.csv'
-    path = f'./{file_name}'  
-    data = pd.read_csv(path)
+    file_name = 'article_tendance_sum.csv' if type == 'tendance' else 'article_topic_sum.csv'
+    data = pd.read_csv(f'static/{file_name}')
     article = data[data['id'] == article_id].to_dict(orient='records')[0]
     return render_template('show_article.html', article=article)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
