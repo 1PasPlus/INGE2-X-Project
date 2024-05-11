@@ -1,8 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify
 import pandas as pd
-import subprocess
-import threading
 import os
+import time
 import csv 
 
 # Définition des langues et des pays pris en charge
@@ -34,22 +33,6 @@ app = Flask(__name__)
 
 progress = 0
 
-def run_topic_script(keyword, language, period, country):
-    global progress
-    progress = 0
-    command = f'python get_topic.py {keyword} {language} {period} {country}'
-    process = subprocess.Popen(command, shell=True)
-    process.wait()
-    progress = 100
-
-def run_trend_script(language, country, period, results):
-    global progress
-    progress = 0
-    command = f'python get_trend.py {language} {country} {period} {results}'
-    process = subprocess.Popen(command, shell=True)
-    process.wait()
-    progress = 100
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -66,10 +49,10 @@ def search_topic():
         # Reset progress
         progress = 0
         
-        # Lancer le script dans un thread séparé
-        threading.Thread(target=run_topic_script, args=(keyword, language, period, country)).start()
+        # Appeler la fonction pour récupérer les actualités par topic
+        os.system(f'python get_topic.py {keyword} {language} {period} {country} &')
         
-        # Rediriger vers la page de chargement
+        # Rediriger vers la page de résultats avec une barre de chargement
         return redirect(url_for('loading', search_type='topic'))
     
     return render_template('search_topic.html', supported_languages=supported_languages, supported_countries=supported_countries)
@@ -86,10 +69,10 @@ def search_trend():
         # Reset progress
         progress = 0
         
-        # Lancer le script dans un thread séparé
-        threading.Thread(target=run_trend_script, args=(language, country, period, results)).start()
+        # Appeler la fonction pour récupérer les tendances
+        os.system(f'python get_trend.py {language} {country} {period} {results} &')
         
-        # Rediriger vers la page de chargement
+        # Rediriger vers la page de résultats avec une barre de chargement
         return redirect(url_for('loading', search_type='trend'))
     
     return render_template('search_trend.html', supported_languages=supported_languages, supported_countries=supported_countries)

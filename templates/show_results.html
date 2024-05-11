@@ -14,16 +14,17 @@
         <form method="post">
             {% for article in articles %}
                 <div>
-                    <h2>{{ article['title'] }}</h2>
-                    <p><strong>Source:</strong> {{ article['source'] }}</p>
-                    <p><strong>Date:</strong> {{ article['publication_date'] }}</p>
-                    <p><strong>Description:</strong> {{ article['description'] }}</p>
-                    <p><strong>Summary:</strong> {{ article['summary'] }}</p>
-                    <button type="submit" name="selected_article" value="{{ article['id'] }}">Select This Article</button>
+                    <h2>{{ article['Titre'] }}</h2>
+                    <p><strong>Source:</strong> {{ article['Source'] }}</p>
+                    <p><strong>Date:</strong> {{ article['Date'] }}</p>
+                    <p><strong>Description:</strong> {{ article['Description'] }}</p>
+                    <p><strong>Résumé:</strong> {{ article['Résumé Bart'] }}</p>
+                    <button type="submit" name="selected_article" value="{{ loop.index0 }}">Select This Article</button>
                 </div>
             {% endfor %}
         </form>
     {% endif %}
 </body>
 </html>
+
 
