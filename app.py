@@ -1,9 +1,8 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify
-import pandas as pd
 import subprocess
-import threading
+from flask import Flask, render_template, request, redirect, url_for
+import pandas as pd
+import csv
 import os
-import csv 
 
 # Définition des langues et des pays pris en charge
 supported_countries = {
@@ -30,25 +29,9 @@ supported_languages = {
     'bengali': 'bn', 'tamil': 'ta', 'telugu': 'te', 'malyalam': 'ml', 'thai': 'th', 'chinese simplified': 'zh-Hans',
     'chinese traditional': 'zh-Hant', 'japanese': 'ja', 'korean': 'ko'
 }
+
 app = Flask(__name__)
 
-progress = 0
-
-def run_topic_script(keyword, language, period, country):
-    global progress
-    progress = 0
-    command = f'python get_topic.py {keyword} {language} {period} {country}'
-    process = subprocess.Popen(command, shell=True)
-    process.wait()
-    progress = 100
-
-def run_trend_script(language, country, period, results):
-    global progress
-    progress = 0
-    command = f'python get_trend.py {language} {country} {period} {results}'
-    process = subprocess.Popen(command, shell=True)
-    process.wait()
-    progress = 100
 
 @app.route('/')
 def index():
@@ -56,52 +39,35 @@ def index():
 
 @app.route('/search_topic', methods=['GET', 'POST'])
 def search_topic():
-    global progress
     if request.method == 'POST':
         keyword = request.form['keyword']
         language = request.form['language']
         period = request.form['period']
         country = request.form['country']
         
-        # Reset progress
-        progress = 0
+        # Appeler la fonction pour récupérer les actualités par topic
+        os.system(f'python get_topic.py {keyword} {language} {period} {country}')
         
-        # Lancer le script dans un thread séparé
-        threading.Thread(target=run_topic_script, args=(keyword, language, period, country)).start()
-        
-        # Rediriger vers la page de chargement
-        return redirect(url_for('loading', search_type='topic'))
+        # Rediriger vers la page de résultats
+        return redirect(url_for('show_results', search_type='topic'))
     
     return render_template('search_topic.html', supported_languages=supported_languages, supported_countries=supported_countries)
 
 @app.route('/search_trend', methods=['GET', 'POST'])
 def search_trend():
-    global progress
     if request.method == 'POST':
         language = request.form['language']
         country = request.form['country']
         period = request.form['period']
         results = request.form['results']
         
-        # Reset progress
-        progress = 0
+        # Appeler la fonction pour récupérer les tendances
+        os.system(f'python get_trend.py {language} {country} {period} {results}')
         
-        # Lancer le script dans un thread séparé
-        threading.Thread(target=run_trend_script, args=(language, country, period, results)).start()
-        
-        # Rediriger vers la page de chargement
-        return redirect(url_for('loading', search_type='trend'))
+        # Rediriger vers la page de résultats
+        return redirect(url_for('show_results', search_type='trend'))
     
     return render_template('search_trend.html', supported_languages=supported_languages, supported_countries=supported_countries)
-
-@app.route('/loading/<search_type>')
-def loading(search_type):
-    return render_template('loading.html', search_type=search_type)
-
-@app.route('/progress')
-def progress_status():
-    global progress
-    return jsonify({'progress': progress})
 
 @app.route('/show_results/<search_type>', methods=['GET', 'POST'])
 def show_results(search_type):
