@@ -59,7 +59,7 @@ def summarize_w_bart(df):
     articles_sum_bart = []
     summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
     count = 0
-    
+
     for article in articles:
         summaries = []  
         
