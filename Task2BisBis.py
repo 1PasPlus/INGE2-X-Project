@@ -11,6 +11,11 @@ from nltk.stem import WordNetLemmatizer
 import csv
 import re
 from collections import Counter
+from PIL import Image
+from diffusers import StableDiffusionPipeline
+import torch
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+import torch
 
 def get_more_info(url):
     response = requests.get(url)
@@ -124,7 +129,7 @@ if choix == "1":
     nb_results = int(input("\n\nCombien de résultats souhaitez-vous afficher? "))
 
     df = top_news(speak, nationality, time_range, nb_results)
-    #df.to_csv("choix_tendances.csv", sep=";", index=False)
+    df.to_csv("choix_tendances.csv", sep=";", index=False)
 
 elif choix == "2":
     keyword = input("\n\nEntrez votre mot-clé : ")
@@ -173,3 +178,33 @@ for i, tags in enumerate(tags_list):
 df.to_csv("choix_tendances_tags.csv", sep=";", index=False)
 
 print("Tags ajoutés au fichier CSV avec succès!")
+
+# Fonction pour générer une image à partir du texte
+def generate_image_from_text(text, model):
+    image = model(text).images[0]
+    return image
+
+# Charger le fichier CSV
+df = pd.read_csv("choix_tendances_tags.csv", delimiter=";")
+
+# Charger le modèle Stable Diffusion v1-5
+model_id = "stabilityai/stable-diffusion-2"
+scheduler = EulerDiscreteScheduler.from_pretrained(model_id, subfolder="scheduler")
+pipe = StableDiffusionPipeline.from_pretrained(model_id, scheduler=scheduler, torch_dtype=torch.float16)
+# Parcourir chaque ligne du DataFrame
+for index, row in df.iterrows():
+    # Choisissez le texte à utiliser pour générer l'image (par exemple, la description de l'article)
+    text = row["Titre"]
+    
+    # Générer l'image à partir du texte
+    image = generate_image_from_text(text, pipe)
+    
+    # Enregistrer l'image avec un nom unique (par exemple, l'index de la ligne)
+    image_path = f"image_{index}.png"
+    image.save(image_path)
+
+    # Mettre à jour le DataFrame avec le chemin de l'image générée
+    df.at[index, "image_path"] = image_path
+
+# Enregistrer le DataFrame mis à jour
+df.to_csv("choix_tendances_tags_with_images.csv", sep=";", index=False)
