@@ -1,22 +1,20 @@
 import pandas as pd
-import sys 
-from transformers import pipeline
+import sys
 from GoogleNews import GoogleNews
 from newspaper import Article
 import requests
 import nltk
+from transformers import pipeline
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import csv
 import re
 from collections import Counter
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+import torch
 
-# Initialisation de NLTK
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-
+# Fonction pour prétraiter le texte
 def preprocess_text(text):
     text = re.sub(r'[^\w\s]', '', text)
     tokens = word_tokenize(text.lower())
@@ -26,23 +24,12 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in tokens]
     return tokens
 
-def generate_tags(df):
-    corpus = []
-    for index, row in df.iterrows():
-        title_tokens = preprocess_text(row['Titre'])
-        description_tokens = preprocess_text(row['Description'])
-        corpus.append(title_tokens + description_tokens)
+# Fonction pour générer une image à partir du texte
+def generate_image_from_text(text, model):
+    image = model(text).images[0]
+    return image
 
-    tags_list = []
-    for article_tokens in corpus:
-        tags = Counter(article_tokens).most_common(5)
-        tags_list.append(tags)
-
-    for i, tags in enumerate(tags_list):
-        df.at[i, 'Tags'] = ', '.join(tag[0] for tag in tags)
-
-    return df
-
+# La fonction pour récupérer des informations supplémentaires depuis un article
 def get_more_info(url):
     response = requests.get(url)
     article = Article(url)
@@ -86,8 +73,33 @@ def topic_news(keyword, language, location, time_range):
             print("Erreur lors de la récupération des informations de l'article:", e)
 
     df = pd.DataFrame(articles_info)
-    dfinal = generate_tags(df)
-    return dfinal
+    # Génération des tags
+    corpus = []
+    for index, row in df.iterrows():
+        title_tokens = preprocess_text(row['Titre'])
+        description_tokens = preprocess_text(row['Description'])
+        corpus.append(title_tokens + description_tokens)
+
+    tags_list = []
+    for article_tokens in corpus:
+        tags = Counter(article_tokens).most_common(5)
+        tags_list.append(tags)
+
+    for i, tags in enumerate(tags_list):
+        df.at[i, 'Tags'] = ', '.join(tag[0] for tag in tags)
+
+    # Charger le modèle Stable Diffusion v1-5
+    model_id = "stabilityai/stable-diffusion-2"
+    pipe = StableDiffusionPipeline.from_pretrained(model_id).to("cpu") 
+    # Génération des images
+    for index, row in df.iterrows():
+        text = row['Titre']
+        image = generate_image_from_text(text, pipe)
+        image_path = f"static/image_{index}.png"
+        image.save(image_path)
+        df.at[index, "Image"] = image_path
+    
+    return df
 
 # Fonction pour résumer le contenu des articles
 def split_into_segments(text, max_segment_length=1000):
@@ -154,4 +166,4 @@ if __name__ == "__main__":
     info = pd.DataFrame(data)
     X = summarize_w_bart(info)
     final_df = pd.concat([info, X], axis=1)
-    final_df.to_csv("article_topic_sum.csv", sep=";", index=False, quoting=csv.QUOTE_ALL)
+    final_df.to_csv("recherche_topic.csv", sep=";", index=False, quoting=csv.QUOTE_ALL)
