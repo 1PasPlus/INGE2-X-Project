@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected Article</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Selected Article Details</h1>
+    <div>
+        <h2>{{ article['Titre'] }}</h2>
+        <p><strong>Source:</strong> {{ article['Source'] }}</p>
+        <p><strong>Date:</strong> {{ article['Date'] }}</p>
+        <p><strong>Description:</strong> {{ article['Description'] }}</p>
+        <p><strong>Summary:</strong> {{ article['Résumé Bart'] }}</p>
+        <p><strong>Tags:</strong> {{ article['Tags'] }}</p>
+        <p>
+            <strong>Image:</strong>
+        <img src="{{ url_for('get_image', filename=article['Image'].split('/')[-1]) }}" alt="Image de l'article">
+        </p>
+
+    </div>
+</body>
+</html>
