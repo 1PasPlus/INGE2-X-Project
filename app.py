@@ -100,5 +100,9 @@ def show_results(search_type):
     
     return render_template('show_results.html', articles=articles)
 
+@app.route('/images/<filename>')
+def get_image(filename):
+    return redirect(url_for('static', filename=os.path.join('images', filename)))
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -15,6 +15,11 @@
         <p><strong>Description:</strong> {{ article['Description'] }}</p>
         <p><strong>Summary:</strong> {{ article['Résumé Bart'] }}</p>
         <p><strong>Tags:</strong> {{ article['Tags'] }}</p>
+        <p>
+            <strong>Image:</strong>
+        <img src="{{ url_for('get_image', filename=article['Image'].split('/')[-1]) }}" alt="Image de l'article">
+        </p>
+
     </div>
 </body>
 </html>
