@@ -19,7 +19,9 @@
             <strong>Image:</strong>
         <img src="{{ url_for('get_image', filename=article['Image'].split('/')[-1]) }}" alt="Image de l'article">
         </p>
-
+        <form action="{{ url_for('create_content') }}" method="get">
+            <button type="submit">Créer du contenu</button>
+        </form>
     </div>
 </body>
 </html>

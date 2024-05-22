@@ -164,9 +164,9 @@ if __name__ == "__main__":
     n = int(article_number)
  
     df = top_news(language, country, time_range, n)
-    df.to_csv("choix_tendances.csv", sep=";", index=False)
+    df.to_csv("articles_tendances.csv", sep=";", index=False)
 
-    with open('choix_tendances.csv', newline='', encoding='utf-8') as csvfile:
+    with open('articles_tendances.csv', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
         data = []
         for row in reader:

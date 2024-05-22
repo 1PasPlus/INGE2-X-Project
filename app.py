@@ -73,10 +73,10 @@ def search_trend():
 def show_results(search_type):
     if search_type == 'topic':
         csv_file = 'article_topic_sum.csv'
-        output_file = 'choix_utilisateur_topic.csv'
+        output_file = 'choix_utilisateur.csv'
     else:
         csv_file = 'article_tendance_sum.csv'
-        output_file = 'choix_utilisateur_trend.csv'
+        output_file = 'choix_utilisateur.csv'
     
     if not os.path.exists(csv_file):
         return render_template('show_results.html', error_message="No results found.")
@@ -103,6 +103,38 @@ def show_results(search_type):
 @app.route('/images/<filename>')
 def get_image(filename):
     return redirect(url_for('static', filename=os.path.join('images', filename)))
+
+import subprocess
+
+@app.route('/create_content', methods=['GET', 'POST'])
+def create_content():
+    if request.method == 'POST':
+        tweet_type = request.form['tweet_type']
+        include_emojis = request.form['include_emojis']
+        include_image = request.form['include_image']
+        sign_tweet = request.form['sign_tweet']
+
+        # Préparer les arguments
+        args = [tweet_type, include_emojis, include_image, sign_tweet]
+
+        # Exécuter content.py avec les arguments
+        result = subprocess.run(
+            ['python', 'content.py'] + args,
+            capture_output=True, text=True
+        )
+
+        # Rediriger vers la page de résumé avec les résultats
+        return redirect(url_for('summary', options=result.stdout.strip()))
+
+    return render_template('create_content.html')
+
+@app.route('/summary')
+def summary():
+    # Récupérer les options passées via l'URL
+    options = request.args.get('options', '')
+
+    # Passer la chaîne directement au template sans conversion en dictionnaire
+    return render_template('summary.html', options=options)
 
 if __name__ == '__main__':
     app.run(debug=True)

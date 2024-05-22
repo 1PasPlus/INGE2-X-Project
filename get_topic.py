@@ -172,10 +172,10 @@ if __name__ == "__main__":
 
     # Appeler la fonction topic_news avec les arguments récupérés
     df = topic_news(keyword, language, region, period)
-    df.to_csv("choix_topic.csv", sep=";", index=False)
+    df.to_csv("articles_topic.csv", sep=";", index=False)
 
     # Lecture de chaque ligne du fichier CSV et traitement individuel
-    with open('choix_topic.csv', newline='', encoding='utf-8') as csvfile:
+    with open('articles_topic.csv', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
         data = []
         for row in reader:
