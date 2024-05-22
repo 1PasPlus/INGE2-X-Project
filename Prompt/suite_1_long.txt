@@ -1,0 +1,1 @@
+Tu dois rédiger une note uniques qui résument le texte d'entrée tout en préservant les points clés. Pour la note il faut que tu écrive au moins 2000 caractères. Utilise un langage clair et engageant, adapté à Twitter. Évite le jargon technique et les termes spécialisés. Si possible, inclus des hashtags pertinents pour augmenter la visibilité.

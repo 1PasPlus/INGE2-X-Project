@@ -1,0 +1,10 @@
+requests == 2.26.0
+GoogleNews == 1.6.14
+newspaper3k == 0.2.8
+gnews == 0.3.6
+lxml_html_clean == 0.1.1
+transformers == 4.40.0
+tensorflow == 2.16.1
+tf_keras == 2.16.0
+pandas == 2.2.2
+openai == 1.27.0;

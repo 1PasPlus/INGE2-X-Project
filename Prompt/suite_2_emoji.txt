@@ -1,0 +1,6 @@
+Exemple de texte d'entrée : "Le gouvernement français a annoncé un plan de relance économique de 100 milliards d'euros pour faire face à la crise du COVID-19. Ce plan comprend des mesures de soutien aux entreprises, aux travailleurs et aux secteurs les plus touchés par la crise."
+
+Tweet généré : "🇫🇷La France dévoile un plan de relance économique de 100 milliards d'euros pour contrer le COVID-19. Des mesures de soutien aux entreprises et aux travailleurs sont prévues.💶🦠 #RelanceEco #COVID19"
+
+Tu dois maintenant rédiger un tweet en fonction du texte suivant : 
+

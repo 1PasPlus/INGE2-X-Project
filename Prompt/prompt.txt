@@ -1,0 +1,19 @@
+<s>
+[INST]
+
+Ceci est un exemple de texte à ajouter dans un fichier.fichier.ntrée.**
+* **Respecter la limite de 200 caractères pour Twitter.**
+* **Préserver l'essence et les points clés du texte d'entrée.**
+* **Utiliser un langage clair et engageant, adapté à Twitter.**
+* **Éviter le jargon technique et les termes spécialisés.**
+* **Si possible, inclure des hashtags pertinents pour augmenter la visibilité.**
+
+**Exemple :**
+
+Texte d'entrée : "Découvrez les dernières avancées en matière d'intelligence artificielle et leur impact sur la société."
+
+Tweet généré : "L'IA révolutionne notre monde ! Explorez les dernières percées et leurs implications dans notre vie quotidienne. #IA #Technologie #Futur"
+[/INST]
+
+**Texte d'entrée :**
+
