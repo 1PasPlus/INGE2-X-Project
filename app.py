@@ -109,32 +109,27 @@ import subprocess
 @app.route('/create_content', methods=['GET', 'POST'])
 def create_content():
     if request.method == 'POST':
+
         tweet_type = request.form['tweet_type']
-        include_emojis = request.form['include_emojis']
-        include_image = request.form['include_image']
-        sign_tweet = request.form['sign_tweet']
 
-        # Préparer les arguments
-        args = [tweet_type, include_emojis, include_image, sign_tweet]
+        os.system(f'python content.py {tweet_type}')
 
-        # Exécuter content.py avec les arguments
-        result = subprocess.run(
-            ['python', 'content.py'] + args,
-            capture_output=True, text=True
-        )
+        csv_file = 'choix_utilisateur.csv'
 
-        # Rediriger vers la page de résumé avec les résultats
-        return redirect(url_for('summary', options=result.stdout.strip()))
+        df = pd.read_csv(csv_file, sep=';', quoting=csv.QUOTE_ALL)
+        article = df.to_dict(orient='records')[0]
+
+        return render_template('summary.html', article=article)
 
     return render_template('create_content.html')
 
 @app.route('/summary')
 def summary():
-    # Récupérer les options passées via l'URL
-    options = request.args.get('options', '')
+    return render_template('summary.html')
 
-    # Passer la chaîne directement au template sans conversion en dictionnaire
-    return render_template('summary.html', options=options)
+@app.route('/end', methods=['GET', 'POST'])
+def end():
+    return render_template('end.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

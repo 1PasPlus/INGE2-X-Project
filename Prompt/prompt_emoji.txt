@@ -1,0 +1,22 @@
+<s>
+[INST]
+
+* **Générer un tweet unique et concis qui résume le texte d'entrée.**
+* **Respecter la limite de 200 caractères pour Twitter.**
+* **Préserver l'essence et les points clés du texte d'entrée.**
+* **Utiliser un langage clair et engageant, adapté à Twitter.**
+* **Inclure des emojis pertinents pour illustrer les points clés et rendre le tweet plus attrayant.**
+* **Éviter le jargon technique et les termes spécialisés.**
+* **Si possible, inclure des hashtags pertinents pour augmenter la visibilité.**
+
+**Exemple :**
+
+Texte d'entrée : "Découvrez les dernières avancées en matière d'intelligence artificielle et leur impact sur la société."
+
+Tweet généré : "🧠L'IA révolutionne notre monde ! Explorez les dernières percées et leurs implications dans notre vie quotidienne. #IA #Technologie #Futur🚀"
+[/INST]
+
+**Texte d'entrée :**
+
+Des étudiants propalestiniens barré l’accès des IEP de Rennes et de Strasbourg ce mardi 30 avril. Les campus délocalisés de Sciences Po Paris à Menton and of Sciences Po Lyon à Saint-Étienne sont également bloqués. La mobilisation s’étend en région. On s’inspire également des mobilisations de la semaine dernière. À Menton, quelques dizaines d’étudiants organisé un 'sit-in' devant l’IEP. Trentaine d’étudiants mobilisés a été évacuée dans le calme en fin de matinée. Ils se font actuellement déloger par les FDO [forces de l’ordre NDLR], comme à la Sorbonne et à Sciences Po Paris.
+</s>

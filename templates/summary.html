@@ -6,7 +6,26 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <h1>Contenu prêt à être posté</h1>
+    <hr>
+    <p><strong>Tweet généré(s):</strong> {{ article['tweet'] }}</p>
+    <br><br>
+    <form action="{{ url_for('end') }}" method="post">
+        <button type="submit">Publier</button>
+    </form>
+    <br><br>
     <h1>Résumé de vos choix</h1>
-    <p>{{ options }}</p>
+    <div>
+        <h2>{{ article['Titre'] }}</h2>
+        <p><strong>Source:</strong> {{ article['Source'] }}</p>
+        <p><strong>Date:</strong> {{ article['Date'] }}</p>
+        <p><strong>Description:</strong> {{ article['Description'] }}</p>
+        <p><strong>Résumé Bart:</strong> {{ article['Résumé Bart'] }}</p>
+        <p><strong>Tags:</strong> {{ article['Tags'] }}</p>
+        <p>
+            <strong>Image:</strong>
+        <img src="{{ url_for('get_image', filename=article['Image'].split('/')[-1]) }}" alt="Image de l'article">
+        </p>
+    </div>
 </body>
 </html>
