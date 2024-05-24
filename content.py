@@ -2,8 +2,6 @@ import re
 import sys
 import pandas as pd
 from openai import OpenAI
-import csv
-import os
 
 def extract_summary_bart():
 
@@ -20,9 +18,9 @@ def extract_summary_bart():
     return resume_bart_column
 
 
-#OPENAI_API_KEY = '<secret_key>'
+#OPENAI_API_KEY = '<YOUR_API_KEY>'
 
-client = OpenAI(api_key="OPEN_API_KEY")
+client = OpenAI(api_key='OPENAI_API_KEY')
 
 def create_content(prompts):
     # Définir les messages d'entrée
@@ -114,35 +112,36 @@ def get_prompt(type,summary):
 if __name__ == "__main__":
     
     choix_user = sys.argv[1]
+    include_image = sys.argv[2]
     summary = extract_summary_bart()
     
-
     prompt = get_prompt(choix_user,summary)
+    tweet = create_content(prompt)
 
-    #print(f'--------------------------{prompt}')
-    
-    tweet = create_content(get_prompt(choix_user,summary))
+    if choix_user == '4': 
+        texte_isole = tweet
 
-    #print(f'--------------------------{tweet}')
-    #print(type(tweet))
-
-    resultat = re.search(r'"(.*?)"', tweet)
-
-    # Vérification si un résultat a été trouvé
-    if resultat:
-        texte_isole = resultat.group(1)
-        print(texte_isole)  # Affiche le texte entre guillemets
     else:
-        print("Aucun texte entre guillemets trouvé")
+        resultat = re.search(r'"(.*?)"', tweet)
+        if resultat:
+            texte_isole = resultat.group(1)
+            print(texte_isole)  
+        else:
+            print("Aucun texte entre guillemets trouvé")
 
-    # Vérification du type
-    print(type(texte_isole))  # Affiche <class 'str'>
+    print(texte_isole)
+    print(type(texte_isole)) 
 
     df = pd.read_csv('choix_utilisateur.csv', sep=';')
 
-    # Ajouter une colonne 'tweet' avec le contenu de texte_isole
     df['tweet'] = texte_isole
 
-    # Enregistrer le fichier CSV mis à jour
+    if include_image == "yes":
+        df['Ajouter image'] = include_image
+    elif include_image == "no":
+        df['Ajouter image'] = include_image
+    else:
+        pass
+
     df.to_csv('choix_utilisateur.csv', sep=';', index=False) 
 

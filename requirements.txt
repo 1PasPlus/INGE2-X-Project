@@ -1,0 +1,14 @@
+pip install pandas
+pip install Flask 
+pip install transformers 
+pip install GoogleNews 
+pip install newspaper3k
+pip install openai
+pip install nltk
+pip install collections 
+pip install gnews
+import csv
+import os 
+import re
+import sys
+import requests
