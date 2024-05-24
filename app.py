@@ -1,4 +1,3 @@
-import subprocess
 from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
 import csv
@@ -111,8 +110,9 @@ def create_content():
     if request.method == 'POST':
 
         tweet_type = request.form['tweet_type']
+        include_image = request.form['include_image']
 
-        os.system(f'python content.py {tweet_type}')
+        os.system(f'python content.py {tweet_type} {include_image}')
 
         csv_file = 'choix_utilisateur.csv'
 
