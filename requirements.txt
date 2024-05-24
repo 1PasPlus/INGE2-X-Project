@@ -1,0 +1,11 @@
+pandas
+Flask 
+transformers 
+GoogleNews 
+newspaper3k
+openai
+nltk
+collections 
+gnews
+tweepy 
+var
