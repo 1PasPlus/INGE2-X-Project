@@ -9,6 +9,7 @@
     <h1>Contenu prêt à être posté</h1>
     <hr>
     <p><strong>Tweet généré(s):</strong> {{ article['tweet'] }}</p>
+    <p><strong>Ajout de l'image :</strong> {{ article['Ajouter image'] }}</p>
     <br><br>
     <form action="{{ url_for('end') }}" method="post">
         <button type="submit">Publier</button>
