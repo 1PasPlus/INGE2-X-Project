@@ -122,13 +122,17 @@ def create_content():
         return render_template('summary.html', article=article)
 
     return render_template('create_content.html')
-
+    
 @app.route('/summary')
 def summary():
     return render_template('summary.html')
 
-@app.route('/end', methods=['GET', 'POST'])
+@app.route('/end', methods=['POST'])
 def end():
+    # Exécutez le script post.py pour publier le tweet
+    result = subprocess.run(["python3", "post.py"], capture_output=True, text=True)
+    print(result.stdout)
+    print(result.stderr)
     return render_template('end.html')
 
 if __name__ == '__main__':
