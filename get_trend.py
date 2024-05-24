@@ -44,10 +44,26 @@ def generate_tags(df):
 
     return df
 
+
+def improve_prompt(text):
+    LL_API_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct"
+    headers = {"Authorization": "Bearer <YOUR_API_KEY>"}
+    payload = {"inputs": f"Generate a detailed image prompt for the following description: {text}"}
+    response = requests.post(LL_API_URL, headers=headers, json=payload)
+    response_json = response.json()
+    
+    # Vérifiez la structure de la réponse JSON
+    if isinstance(response_json, list) and len(response_json) > 0:
+        improved_text = response_json[0].get('generated_text', text).strip()  # Accédez au premier élément de la liste
+    else:
+        improved_text = text  # Si la réponse n'est pas conforme, utilisez le texte original
+
+    return improved_text
+
 # Fonction pour interroger l'API pour générer une image à partir du texte
 def generate_image_from_text(text):
     API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
-    headers = {"Authorization": "Bearer < Your_Key >"}
+    headers = {"Authorization": "Bearer <YOUR_API_KEY>"}
     payload = {"inputs": text}
     response = requests.post(API_URL, headers=headers, json=payload)
     image_bytes = response.content
@@ -91,9 +107,11 @@ def top_news(article_language, article_country, time_period, article_number):
     # Itérer à travers chaque ligne du fichier CSV
     for index, row in dfinal.iterrows():
         # Récupérer le texte de l'article
-        text = row['Description']
-        # Générer l'image à partir du texte
-        image_bytes = generate_image_from_text(text)
+        prompt = row['Description']
+        # Améliorer le prompt qui génèrera l'image wsh
+        improved_prompt = improve_prompt(prompt)
+        # Générer l'image
+        image_bytes = generate_image_from_text(improved_prompt)
     
         # Enregistrer l'image avec un nom unique (par exemple, l'index de la ligne)
         image_path = f"static/images/image_trend_{index}.png"
