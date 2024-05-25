@@ -115,19 +115,24 @@ if __name__ == "__main__":
     prompt = get_prompt(choix_user,summary)
     tweet = create_content(prompt)
 
+    #print(f'----------------------------{tweet}')
+
     if choix_user == '4': 
+        texte_isole = tweet
+
+    if choix_user == '3':
         texte_isole = tweet
 
     else:
         resultat = re.search(r'"(.*?)"', tweet)
         if resultat:
             texte_isole = resultat.group(1)
-            print(texte_isole)  
+            #print(texte_isole)  
         else:
             print("Aucun texte entre guillemets trouvé")
 
-    print(texte_isole)
-    print(type(texte_isole)) 
+    #print(f'-----------------------{texte_isole}')
+    #print(type(texte_isole)) 
 
     df = pd.read_csv('choix_utilisateur.csv', sep=';')
 

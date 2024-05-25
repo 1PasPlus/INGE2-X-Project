@@ -91,7 +91,7 @@ def show_results(search_type):
         # Sauvegarder le choix de l'utilisateur dans un nouveau fichier CSV
         selected_df = pd.DataFrame([selected_article])
         if os.path.exists(output_file):
-            selected_df.to_csv(output_file, mode='a', header=False, sep=';', index=False, quoting=csv.QUOTE_ALL)
+            selected_df.to_csv(output_file, sep=';', index=False, quoting=csv.QUOTE_ALL)
         else:
             selected_df.to_csv(output_file, sep=';', index=False, quoting=csv.QUOTE_ALL)
         
