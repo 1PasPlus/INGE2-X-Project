@@ -17,7 +17,7 @@ def extract_summary_bart():
     # Renvoyer la valeur de resume_bart_column en tant que chaîne de caractères
     return resume_bart_column
 
-client = OpenAI(api_key='UR_API_K_LOOOL')
+client = OpenAI(api_key='UR_KEY')
 
 def create_content(prompts):
     # Définir les messages d'entrée
@@ -115,28 +115,22 @@ if __name__ == "__main__":
     prompt = get_prompt(choix_user,summary)
     tweet = create_content(prompt)
 
-    #print(f'----------------------------{tweet}')
+    df = pd.read_csv('choix_utilisateur.csv', sep=';')
 
     if choix_user == '4': 
-        texte_isole = tweet
-
-    if choix_user == '3':
-        texte_isole = tweet
+        df['tweet'] = tweet
 
     else:
         resultat = re.search(r'"(.*?)"', tweet)
         if resultat:
             texte_isole = resultat.group(1)
             #print(texte_isole)  
+            df['tweet'] = texte_isole
         else:
             print("Aucun texte entre guillemets trouvé")
+            df['tweet'] = tweet 
 
-    #print(f'-----------------------{texte_isole}')
-    #print(type(texte_isole)) 
-
-    df = pd.read_csv('choix_utilisateur.csv', sep=';')
-
-    df['tweet'] = texte_isole
+    df['type de contenu'] = choix_user
 
     if include_image == "yes":
         df['Ajouter image'] = include_image

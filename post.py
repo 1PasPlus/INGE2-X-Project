@@ -1,6 +1,7 @@
 import tweepy
 import var
 import pandas as pd
+import time
 
 def create_tweepy_client():
     return tweepy.Client(
@@ -42,16 +43,64 @@ if __name__ == "__main__":
     tweet = article['tweet']
     img = article['Image']
     include_image = article['Ajouter image']
+    type_of_content = article['type de contenu']
 
     print(f'---------------------------—{tweet}')
     print(f'---------------------------—{img}')
     print(f'---------------------------—{include_image}')
 
     if include_image == "yes":
-        publish_tweet_w_img(client, img, tweet)
-    elif include_image == "no":
-        publish_tweet(client, tweet) 
-    else:
-        pass
 
-    #Petite pute
+        if type_of_content == 1:
+            print("posting tweet 1 w image")
+            publish_tweet_w_img(client, img, tweet)
+        elif type_of_content == 2:
+            print("posting tweet 2 w image")
+            publish_tweet_w_img(client, img, tweet)
+        elif type_of_content == 3:
+            print("posting tweet 3 w image")
+            publish_tweet_w_img(client, img, tweet)
+
+        elif type_of_content == 4:
+
+            # Diviser la chaîne en utilisant ":" comme délimiteur
+            tweets_list = tweet.split('Tweet ')[1:]
+            for i in range (0,len(tweets_list)):
+
+                separate_tweet = tweets_list[i].strip()
+                final_tweet_list = separate_tweet.split(':')[1:]
+                final_tweet = final_tweet_list[0]
+                publish_tweet_w_img(client, img, final_tweet)
+                print("posting tweet 4 w image")
+                time.sleep(2)
+   
+
+    elif include_image == "no":
+        
+        if type_of_content == 1:
+            publish_tweet(client, tweet)
+            print("posting tweet 1 without image")
+        elif type_of_content == 2:
+            publish_tweet(client, tweet)
+            print("posting tweet 2 without image")
+        elif type_of_content == 3:
+            publish_tweet(client, tweet)
+            print("posting tweet 3 without image")
+
+        elif type_of_content == 4:
+
+            # Diviser la chaîne en utilisant ":" comme délimiteur
+            tweets_list = tweet.split('Tweet ')[1:]
+            for i in range (0,len(tweets_list)):
+
+                separate_tweet = tweets_list[i].strip()
+                final_tweet_list = separate_tweet.split(': ')[1:]
+                final_tweet = final_tweet_list[0]
+                publish_tweet(client, final_tweet)
+                print("posting tweet 4 without image")
+                time.sleep(2)
+
+    else:
+        print("Error no image")
+        pass
+                

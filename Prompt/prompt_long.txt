@@ -10,6 +10,7 @@
 * **Éviter le jargon technique et les termes spécialisés.**
 * **Si possible, inclure des hashtags pertinents pour augmenter la visibilité.**
 * **Écris le tweet en Français.**
+* **Ta réponse devra être donnée comme ceci "Contenu : {tweet_généré}"**
 
 **Exemple :**
 

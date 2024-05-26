@@ -7,7 +7,9 @@
 * **Utiliser un langage clair et engageant, adapté à Twitter.**
 * **Inclure des emojis pertinents pour illustrer les points clés et rendre le tweet plus attrayant.**
 * **Éviter le jargon technique et les termes spécialisés.**
+* **Conserver la langue d'origine du tweet, pas de traduction.**
 * **Si possible, inclure des hashtags pertinents pour augmenter la visibilité.**
+* **Ta réponse devra être donnée comme ceci "Contenu : {tweet_généré}"**
 
 **Exemple :**
 
