@@ -2,6 +2,7 @@ import tweepy
 import var
 import pandas as pd
 import time
+import os
 
 def create_tweepy_client():
     return tweepy.Client(
@@ -103,4 +104,25 @@ if __name__ == "__main__":
     else:
         print("Error no image")
         pass
-                
+
+    if os.path.exists("article_tendance_sum.csv"):
+        os.remove("article_tendance_sum.csv")
+        print("article_tendance_sum.csv a été supprimé avec succès.")
+
+    elif os.path.exists("article_topic_sum.csv"):
+        os.remove("article_topic_sum.csv")
+        print("article_topic_sum.csv a été supprimé avec succès.")
+    
+    print("passons aux suivants")
+
+    if os.path.exists("articles_tendances.csv"):
+        os.remove("articles_tendances.csv")
+        print("articles_tendances.csv a été supprimé avec succès.")
+    
+    elif os.path.exists("articles_topic.csv"):
+        os.remove("articles_topic.csv")
+        print("article_topic.csv a été supprimé avec succès.")
+
+    if os.path.exists("choix_utilisateur.csv"):
+        os.remove("choix_utilisateur.csv")
+        print("choix_utilisateur.csv a été supprimé avec succès.")
