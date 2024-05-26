@@ -17,7 +17,7 @@ def extract_summary_bart():
     # Renvoyer la valeur de resume_bart_column en tant que chaîne de caractères
     return resume_bart_column
 
-client = OpenAI(api_key='UR_KEY')
+client = OpenAI(api_key='<YOUR_API_KEY>'')
 
 def create_content(prompts):
     # Définir les messages d'entrée

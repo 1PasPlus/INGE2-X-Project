@@ -61,7 +61,7 @@ def improve_prompt(text):
 
 def generate_image_from_text(text):
     API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
-    headers = {"Authorization": "Bearer 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"}
+    headers = {"Authorization": "Bearer <YOUR_API_KEY>"}
     payload = {"inputs": text}
     response = requests.post(API_URL, headers=headers, json=payload)
     image_bytes = response.content

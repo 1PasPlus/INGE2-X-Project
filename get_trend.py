@@ -2,7 +2,6 @@ from gnews import GNews
 import pandas as pd
 import sys 
 from transformers import pipeline
-from GoogleNews import GoogleNews
 from newspaper import Article
 import requests
 import nltk
@@ -62,7 +61,7 @@ def improve_prompt(text):
 # Fonction pour interroger l'API pour générer une image à partir du texte
 def generate_image_from_text(text):
     API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
-    headers = {"Authorization": "Bearer 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"}
+    headers = {"Authorization": "Bearer <YOUR_API_KEY>"}
     payload = {"inputs": text}
     response = requests.post(API_URL, headers=headers, json=payload)
     image_bytes = response.content
